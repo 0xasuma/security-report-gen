@@ -17,9 +17,9 @@ import re
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# MiMo API config
-MIMO_API_KEY = os.environ.get("MIMO_API_KEY", "")
-MIMO_API_BASE = "https://token-plan-sgp.xiaomimimo.com/v1"
+# MiMo API config (via 9router proxy)
+MIMO_API_KEY = os.environ.get("MIMO_API_KEY", "sk-WaGKTcDXJcvYhJDAdekwqzxlz7etoWCCiigwcp7tbA")
+MIMO_API_BASE = os.environ.get("MIMO_API_BASE", "http://43.134.12.202:20128/v1")
 MIMO_MODEL = "mimo-v2.5-pro"
 
 # Sample scan data for demo
