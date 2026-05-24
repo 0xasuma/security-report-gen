@@ -864,7 +864,17 @@ Supported formats:
             formData.append('include_executive', document.getElementById('includeExecutive').checked ? 'on' : 'off');
             
             try {
-                const resp = await fetch('/analyze', { method: 'POST', body: formData });
+                // Add timeout - AI analysis can take 30-90 seconds
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+                
+                const resp = await fetch('/analyze', { 
+                    method: 'POST', 
+                    body: formData,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
                 const data = await resp.json();
                 
                 if (data.error) {
@@ -876,7 +886,11 @@ Supported formats:
                 output.classList.add('visible');
                 output.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                alert('Analysis failed: ' + e.message);
+                if (e.name === 'AbortError') {
+                    alert('Analysis timed out. The AI model is taking too long. Please try again.');
+                } else {
+                    alert('Analysis failed: ' + e.message);
+                }
             } finally {
                 btn.classList.remove('loading');
                 btn.disabled = false;
