@@ -10,12 +10,14 @@ import time
 import hashlib
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_file
+from flask_cors import CORS
 import requests
 import io
 import re
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+CORS(app)
 
 # MiMo API config (via 9router proxy)
 MIMO_API_KEY = os.environ.get("MIMO_API_KEY", "sk-WaGKTcDXJcvYhJDAdekwqzxlz7etoWCCiigwcp7tbA")
